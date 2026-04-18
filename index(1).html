@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rayl — Health Verification, Reimagined</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --violet: #C96FFF; --mint: #00C98A; --cyan: #00D4FF;
+  --coral: #FF4B6E; --pink: #FF2D9B; --gold: #FFB830;
+  --bg: #0A0812; --bg2: #100E1A; --bg3: #15112A;
+  --text: #F0EAF8; --muted: #8A7FA0;
+}
+body { background: var(--bg); color: var(--text); font-family: 'Outfit', sans-serif; overflow-x: hidden; line-height: 1.6; }
+a { color: inherit; text-decoration: none; }
+html { scroll-behavior: smooth; }
+
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 300;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.25rem 4rem;
+  background: rgba(10,8,18,0.92); backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(201,111,255,0.1);
+}
+.nav-logo { font-family: 'DM Mono', monospace; font-size: 1.4rem; font-weight: 500; letter-spacing: 0.15em; color: var(--violet); cursor: pointer; }
+.nav-links { display: flex; gap: 2.5rem; list-style: none; font-size: 0.85rem; color: var(--muted); align-items: center; }
+.nav-links a { cursor: pointer; transition: color 0.2s; }
+.nav-links a:hover { color: var(--text); }
+.nav-right { display: flex; gap: 0.75rem; align-items: center; }
+.nav-admin-btn { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.08em; color: var(--muted); cursor: pointer; padding: 0.5rem 1rem; border: 1px solid rgba(255,255,255,0.08); border-radius: 2px; transition: all 0.2s; background: none; }
+.nav-admin-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.22); }
+.nav-cta { font-family: 'DM Mono', monospace; font-size: 0.78rem; letter-spacing: 0.1em; padding: 0.6rem 1.5rem; border: 1px solid var(--violet); color: var(--violet); border-radius: 2px; transition: all 0.2s; cursor: pointer; background: none; }
+.nav-cta:hover { background: var(--violet); color: var(--bg); }
+
+.hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding-top: 5rem; position: relative; overflow: hidden; }
+.hero-bg { position: absolute; inset: 0; pointer-events: none; }
+.orb-bg { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.15; }
+.orb-bg-1 { width: 700px; height: 700px; background: var(--violet); top: -150px; right: -150px; }
+.orb-bg-2 { width: 500px; height: 500px; background: var(--mint); bottom: -100px; left: -100px; }
+.orb-bg-3 { width: 350px; height: 350px; background: var(--cyan); top: 55%; left: 42%; }
+.hero-inner { max-width: 1200px; margin: 0 auto; padding: 4rem 4rem 6rem; display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; position: relative; z-index: 1; }
+.eyebrow { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.2em; color: var(--violet); text-transform: uppercase; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; }
+.eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--violet); }
+h1 { font-family: 'DM Serif Display', serif; font-size: 4.5rem; line-height: 1.05; font-weight: 400; margin-bottom: 1.5rem; }
+h1 em { font-style: italic; color: var(--violet); }
+.hero-sub { font-size: 1.1rem; color: var(--muted); font-weight: 300; max-width: 440px; margin-bottom: 2.5rem; line-height: 1.75; }
+.hero-actions { display: flex; gap: 1rem; align-items: center; margin-bottom: 2rem; }
+.btn-primary { background: var(--violet); color: var(--bg); font-family: 'DM Mono', monospace; font-size: 0.8rem; letter-spacing: 0.1em; padding: 0.9rem 2rem; border-radius: 2px; font-weight: 500; transition: opacity 0.2s; cursor: pointer; border: none; }
+.btn-primary:hover { opacity: 0.85; }
+.btn-ghost { font-family: 'DM Mono', monospace; font-size: 0.8rem; letter-spacing: 0.08em; color: var(--muted); transition: color 0.2s; cursor: pointer; background: none; border: none; }
+.btn-ghost:hover { color: var(--text); }
+.pill-badges { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.pill { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.08em; padding: 0.35rem 0.9rem; border-radius: 99px; border: 1px solid; }
+.pill.violet { border-color: rgba(201,111,255,0.3); color: var(--violet); background: rgba(201,111,255,0.06); }
+.pill.mint { border-color: rgba(0,201,138,0.3); color: var(--mint); background: rgba(0,201,138,0.06); }
+.pill.cyan { border-color: rgba(0,212,255,0.3); color: var(--cyan); background: rgba(0,212,255,0.06); }
+
+.phone { width: 240px; height: 490px; background: var(--bg2); border-radius: 32px; border: 1px solid rgba(201,111,255,0.2); display: flex; flex-direction: column; align-items: center; padding: 1.5rem 1.25rem; box-shadow: 0 0 80px rgba(201,111,255,0.18), 0 0 200px rgba(0,201,138,0.06); margin: 0 auto; }
+.phone-bar { width: 60px; height: 5px; background: rgba(255,255,255,0.08); border-radius: 3px; margin-bottom: 1.5rem; }
+.phone-app-name { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; margin-bottom: 1.25rem; }
+.orb { width: 110px; height: 110px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; background: radial-gradient(circle at 35% 35%, #00FFB8, #00C98A, #007A55); box-shadow: 0 0 50px rgba(0,201,138,0.75), 0 0 120px rgba(0,201,138,0.25); animation: pg 3s ease-in-out infinite; }
+@keyframes pg { 0%,100%{box-shadow:0 0 50px rgba(0,201,138,0.75),0 0 120px rgba(0,201,138,0.25)} 50%{box-shadow:0 0 75px rgba(0,201,138,1),0 0 180px rgba(0,201,138,0.4)} }
+.orb-lbl { font-family: 'DM Mono', monospace; font-size: 0.55rem; font-weight: 500; letter-spacing: 0.12em; color: var(--bg); text-align: center; line-height: 1.4; }
+.orb-status { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--mint); margin-bottom: 1.5rem; text-align: center; }
+.qr-box { width: 72px; height: 72px; border: 1px solid rgba(201,111,255,0.25); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 0.75rem; background: rgba(201,111,255,0.04); }
+.qr-grid { display: grid; grid-template-columns: repeat(6,1fr); gap: 2px; width: 46px; height: 46px; }
+.qc { background: var(--violet); border-radius: 1px; }
+.qc.e { background: transparent; }
+.phone-share { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 0.12em; color: var(--muted); text-transform: uppercase; }
+
+.divider { height: 1px; background: linear-gradient(to right, transparent, rgba(201,111,255,0.15), transparent); max-width: 1200px; margin: 0 auto; }
+.section { max-width: 1200px; margin: 0 auto; padding: 6rem 4rem; }
+.section-label { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.2em; color: var(--violet); text-transform: uppercase; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem; }
+.section-label::before { content: ''; display: block; width: 20px; height: 1px; background: var(--violet); }
+h2 { font-family: 'DM Serif Display', serif; font-size: 3rem; line-height: 1.1; font-weight: 400; margin-bottom: 1.5rem; }
+h2 em { font-style: italic; }
+
+.how-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; margin-top: 3rem; }
+.steps { display: flex; flex-direction: column; gap: 2rem; }
+.step { display: flex; gap: 1.25rem; }
+.step-dot { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'DM Mono', monospace; font-size: 0.62rem; font-weight: 500; flex-shrink: 0; margin-top: 3px; color: var(--bg); }
+.step h3 { font-size: 1rem; font-weight: 500; margin-bottom: 0.3rem; }
+.step p { font-size: 0.875rem; color: var(--muted); font-weight: 300; line-height: 1.65; }
+.orbs-panel { display: flex; flex-direction: column; gap: 0.875rem; }
+.orb-row { display: flex; align-items: center; gap: 1.25rem; padding: 1rem 1.5rem; background: var(--bg2); border-radius: 12px; border: 1px solid rgba(255,255,255,0.04); }
+.orb-mini { width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0; }
+.orb-mini.green { background: radial-gradient(circle at 35% 35%, #00FFB8, #00C98A); box-shadow: 0 0 14px rgba(0,201,138,0.5); }
+.orb-mini.yellow { background: radial-gradient(circle at 35% 35%, #FFE566, #FFD000); box-shadow: 0 0 14px rgba(255,208,0,0.5); }
+.orb-mini.gray { background: radial-gradient(circle at 35% 35%, #B0AABB, #6E6880); box-shadow: 0 0 10px rgba(110,104,128,0.4); }
+.orb-mini.red { background: radial-gradient(circle at 35% 35%, #FF7A90, #FF4B6E); box-shadow: 0 0 14px rgba(255,75,110,0.4); }
+.orb-info h4 { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.08em; font-weight: 500; margin-bottom: 0.2rem; }
+.orb-info p { font-size: 0.78rem; color: var(--muted); font-weight: 300; }
+
+.privacy-band { background: var(--bg2); border-top: 1px solid rgba(0,212,255,0.07); border-bottom: 1px solid rgba(0,212,255,0.07); }
+.privacy-inner { max-width: 1200px; margin: 0 auto; padding: 6rem 4rem; }
+.privacy-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; margin-top: 3rem; }
+.privacy-card { background: rgba(0,212,255,0.04); border: 1px solid rgba(0,212,255,0.1); border-radius: 12px; padding: 2rem; }
+.privacy-icon { font-size: 1.4rem; margin-bottom: 1rem; }
+.privacy-card h3 { font-size: 1rem; font-weight: 500; margin-bottom: 0.5rem; color: var(--cyan); }
+.privacy-card p { font-size: 0.85rem; color: var(--muted); font-weight: 300; line-height: 1.65; }
+
+.for-who { max-width: 1200px; margin: 0 auto; padding: 6rem 4rem; }
+.who-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; margin-top: 3rem; }
+.who-card { background: var(--bg2); border: 1px solid rgba(255,255,255,0.04); border-radius: 12px; padding: 2rem; }
+.who-tag { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.12em; padding: 0.3rem 0.8rem; border-radius: 99px; margin-bottom: 1.25rem; display: inline-block; }
+.who-tag.v { background: rgba(201,111,255,0.12); color: var(--violet); }
+.who-tag.m { background: rgba(0,201,138,0.12); color: var(--mint); }
+.who-tag.p { background: rgba(255,45,155,0.12); color: var(--pink); }
+.who-card h3 { font-size: 1.05rem; font-weight: 500; margin-bottom: 0.6rem; }
+.who-card p { font-size: 0.85rem; color: var(--muted); font-weight: 300; line-height: 1.65; }
+
+.quote-band { background: var(--bg3); border-top: 1px solid rgba(255,184,48,0.07); border-bottom: 1px solid rgba(255,184,48,0.07); padding: 4rem; text-align: center; }
+.quote-text { font-family: 'DM Serif Display', serif; font-size: 1.5rem; font-style: italic; max-width: 680px; margin: 0 auto 1rem; line-height: 1.5; opacity: 0.9; }
+.quote-src { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.15em; color: var(--gold); text-transform: uppercase; }
+
+.cta-section { text-align: center; padding: 8rem 4rem; position: relative; overflow: hidden; }
+.cta-glow { position: absolute; width: 700px; height: 500px; background: radial-gradient(ellipse, rgba(201,111,255,0.1), transparent 70%); top: 50%; left: 50%; transform: translate(-50%,-50%); pointer-events: none; }
+.cta-section h2 { font-size: 3.5rem; max-width: 560px; margin: 0 auto 1rem; }
+.cta-section h2 em { color: var(--violet); }
+.cta-sub { font-size: 1rem; color: var(--muted); max-width: 420px; margin: 0 auto 2.5rem; font-weight: 300; line-height: 1.75; }
+.cta-buttons { display: flex; gap: 1rem; justify-content: center; align-items: center; flex-wrap: wrap; }
+.btn-large { background: var(--violet); color: var(--bg); font-family: 'DM Mono', monospace; font-size: 0.82rem; letter-spacing: 0.1em; padding: 1rem 2.5rem; border-radius: 2px; font-weight: 500; transition: opacity 0.2s; cursor: pointer; border: none; }
+.btn-large:hover { opacity: 0.85; }
+.btn-outline { border: 1px solid rgba(201,111,255,0.3); color: var(--violet); font-family: 'DM Mono', monospace; font-size: 0.82rem; letter-spacing: 0.1em; padding: 1rem 2.5rem; border-radius: 2px; transition: border-color 0.2s; cursor: pointer; background: none; }
+.btn-outline:hover { border-color: var(--violet); }
+.app-badges { display: flex; gap: 0.75rem; justify-content: center; margin-top: 1.75rem; }
+.app-badge { display: flex; align-items: center; gap: 0.6rem; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 0.6rem 1.25rem; font-size: 0.78rem; color: var(--muted); }
+
+footer { padding: 3rem 4rem; border-top: 1px solid rgba(255,255,255,0.04); display: flex; align-items: center; justify-content: space-between; max-width: 1200px; margin: 0 auto; }
+.footer-logo { font-family: 'DM Mono', monospace; font-size: 1.1rem; letter-spacing: 0.15em; color: var(--violet); font-weight: 500; margin-bottom: 0.25rem; }
+.footer-sub { font-size: 0.78rem; color: var(--muted); font-weight: 300; }
+.footer-links { display: flex; gap: 2rem; list-style: none; }
+.footer-links a { font-size: 0.78rem; color: var(--muted); transition: color 0.2s; cursor: pointer; }
+.footer-links a:hover { color: var(--text); }
+.footer-note { font-family: 'DM Mono', monospace; font-size: 0.6rem; color: rgba(138,127,160,0.35); letter-spacing: 0.08em; }
+
+/* OVERLAYS */
+.overlay { display: none; position: fixed; inset: 0; z-index: 200; background: var(--bg); overflow-y: auto; }
+.overlay.active { display: block; }
+.overlay-inner { max-width: 800px; margin: 0 auto; padding: 8rem 4rem 6rem; }
+.overlay-back { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.15em; color: var(--violet); background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 3rem; padding: 0; }
+.overlay-back:hover { opacity: 0.75; }
+
+/* PRIVACY + FAQ page text */
+.page-h1 { font-family: 'DM Serif Display', serif; font-size: 3rem; font-weight: 400; margin-bottom: 0.5rem; }
+.page-updated { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 3rem; display: block; }
+.page-section { margin-bottom: 2.5rem; }
+.page-section h2 { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--violet); margin-bottom: 0.75rem; font-weight: 500; }
+.page-section p, .page-section li { font-size: 0.9rem; color: var(--muted); font-weight: 300; line-height: 1.75; }
+.page-section ul { padding-left: 1.25rem; display: flex; flex-direction: column; gap: 0.4rem; }
+.page-divider { height: 1px; background: rgba(201,111,255,0.1); margin: 2.5rem 0; }
+.faq-item { border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1.5rem; margin-bottom: 1.5rem; }
+.faq-q { font-size: 1rem; font-weight: 500; color: var(--text); cursor: pointer; display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; padding: 0.25rem 0; }
+.faq-q:hover { color: var(--violet); }
+.faq-chevron { color: var(--violet); font-size: 1rem; flex-shrink: 0; transition: transform 0.2s; display: inline-block; }
+.faq-a { font-size: 0.875rem; color: var(--muted); font-weight: 300; line-height: 1.75; display: none; margin-top: 0.75rem; }
+.faq-item.open .faq-a { display: block; }
+.faq-item.open .faq-chevron { transform: rotate(90deg); }
+
+/* WAITLIST */
+.waitlist-card { background: var(--bg2); border: 1px solid rgba(201,111,255,0.15); border-radius: 16px; padding: 3rem; margin-top: 2.5rem; }
+.wl-label { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.15em; color: var(--violet); text-transform: uppercase; display: block; margin-bottom: 0.5rem; }
+.wl-input { width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(201,111,255,0.2); border-radius: 6px; padding: 0.85rem 1rem; font-family: 'Outfit', sans-serif; font-size: 0.9rem; color: var(--text); margin-bottom: 1.5rem; outline: none; transition: border-color 0.2s; }
+.wl-input:focus { border-color: var(--violet); }
+.wl-input::placeholder { color: var(--muted); }
+.wl-select { width: 100%; background: #0f0d1c; border: 1px solid rgba(201,111,255,0.2); border-radius: 6px; padding: 0.85rem 1rem; font-family: 'Outfit', sans-serif; font-size: 0.9rem; color: var(--text); margin-bottom: 0.5rem; outline: none; cursor: pointer; appearance: none; -webkit-appearance: none; transition: border-color 0.2s; }
+.wl-select:focus { border-color: var(--violet); }
+.wl-select option { background: #0f0d1c; color: var(--text); }
+.wl-hint { font-size: 0.75rem; color: var(--muted); font-weight: 300; margin-bottom: 1.75rem; line-height: 1.6; }
+.wl-submit { width: 100%; background: var(--violet); color: var(--bg); font-family: 'DM Mono', monospace; font-size: 0.82rem; letter-spacing: 0.1em; padding: 1rem; border-radius: 4px; font-weight: 500; border: none; cursor: pointer; transition: opacity 0.2s; }
+.wl-submit:hover { opacity: 0.85; }
+.wl-error { font-family: 'DM Mono', monospace; font-size: 0.75rem; letter-spacing: 0.05em; color: var(--coral); margin-bottom: 1rem; display: none; }
+.wl-success { text-align: center; padding: 2rem 1rem; display: none; }
+.wl-success-orb { width: 80px; height: 80px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #00FFB8, #00C98A); box-shadow: 0 0 40px rgba(0,201,138,0.6); margin: 0 auto 1.5rem; display: flex; align-items: center; justify-content: center; font-size: 1.75rem; color: var(--bg); font-weight: 500; }
+.wl-success h3 { font-family: 'DM Serif Display', serif; font-size: 1.75rem; font-weight: 400; margin-bottom: 0.75rem; }
+.wl-success p { font-size: 0.9rem; color: var(--muted); font-weight: 300; line-height: 1.7; }
+
+/* LOGIN */
+.login-card { background: var(--bg2); border: 1px solid rgba(201,111,255,0.15); border-radius: 16px; padding: 2.5rem; margin-top: 2rem; }
+.login-error { background: rgba(255,75,110,0.08); border: 1px solid rgba(255,75,110,0.2); border-radius: 6px; padding: 0.75rem 1rem; font-size: 0.82rem; color: var(--coral); margin-bottom: 1.25rem; display: none; font-family: 'DM Mono', monospace; font-size: 0.75rem; letter-spacing: 0.04em; }
+
+/* ADMIN */
+.admin-wrap { max-width: 1100px; margin: 0 auto; padding: 8rem 4rem 6rem; }
+.admin-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 2.5rem; gap: 1rem; flex-wrap: wrap; }
+.admin-title { font-family: 'DM Serif Display', serif; font-size: 2.2rem; font-weight: 400; }
+.admin-meta { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.08em; margin-top: 0.25rem; }
+.admin-actions { display: flex; gap: 0.75rem; align-items: center; }
+.admin-logout { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.08em; color: var(--muted); background: none; border: 1px solid rgba(255,255,255,0.08); border-radius: 2px; padding: 0.55rem 1.25rem; cursor: pointer; transition: all 0.2s; }
+.admin-logout:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+.admin-dl { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.08em; color: var(--bg); background: var(--mint); border: none; border-radius: 2px; padding: 0.55rem 1.25rem; cursor: pointer; font-weight: 500; transition: opacity 0.2s; }
+.admin-dl:hover { opacity: 0.85; }
+.admin-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; margin-bottom: 1.75rem; }
+.admin-stat { background: var(--bg2); border: 1px solid rgba(255,255,255,0.04); border-radius: 10px; padding: 1.25rem 1.5rem; }
+.admin-stat-num { font-family: 'DM Serif Display', serif; font-size: 2.2rem; color: var(--violet); line-height: 1; margin-bottom: 0.3rem; }
+.admin-stat-lbl { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; }
+.admin-table-wrap { background: var(--bg2); border: 1px solid rgba(255,255,255,0.04); border-radius: 12px; overflow: hidden; margin-bottom: 1.5rem; }
+.admin-table-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.04); display: flex; align-items: center; justify-content: space-between; }
+.admin-table-title { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.15em; color: var(--violet); text-transform: uppercase; }
+.admin-search { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; padding: 0.45rem 0.9rem; font-family: 'Outfit', sans-serif; font-size: 0.8rem; color: var(--text); outline: none; width: 220px; }
+.admin-search::placeholder { color: var(--muted); }
+.admin-table { width: 100%; border-collapse: collapse; }
+.admin-table th { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); padding: 0.75rem 1.5rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.04); font-weight: 400; }
+.admin-table td { padding: 0.9rem 1.5rem; font-size: 0.85rem; color: var(--text); border-bottom: 1px solid rgba(255,255,255,0.03); }
+.admin-table tr:last-child td { border-bottom: none; }
+.admin-table tbody tr:hover td { background: rgba(201,111,255,0.03); }
+.admin-empty { text-align: center; padding: 4rem 2rem; font-family: 'DM Mono', monospace; font-size: 0.75rem; letter-spacing: 0.1em; color: var(--muted); }
+.state-badge { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.06em; padding: 0.25rem 0.7rem; border-radius: 99px; background: rgba(201,111,255,0.1); color: var(--violet); }
+.admin-chart { background: var(--bg2); border: 1px solid rgba(255,255,255,0.04); border-radius: 12px; padding: 1.75rem; }
+.chart-title { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.15em; color: var(--violet); text-transform: uppercase; margin-bottom: 1.25rem; }
+.chart-bars { display: flex; flex-direction: column; gap: 0.65rem; }
+.chart-row { display: flex; align-items: center; gap: 0.85rem; }
+.chart-state-lbl { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--muted); width: 90px; flex-shrink: 0; text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.chart-bar-wrap { flex: 1; background: rgba(255,255,255,0.04); border-radius: 2px; height: 8px; overflow: hidden; }
+.chart-bar-fill { height: 100%; background: linear-gradient(to right, var(--violet), var(--mint)); border-radius: 2px; }
+.chart-count { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--muted); width: 20px; text-align: right; }
+
+/* ═══ RESPONSIVE — TABLET ═══ */
+@media (max-width: 900px) {
+  nav { padding: 0.9rem 1.25rem; }
+  .nav-logo { font-size: 1.15rem; letter-spacing: 0.12em; }
+  .nav-links { display: none; }
+  .nav-right { gap: 0.5rem; }
+  .nav-admin-btn { padding: 0.45rem 0.8rem; font-size: 0.68rem; letter-spacing: 0.06em; }
+  .nav-cta { padding: 0.5rem 1rem; font-size: 0.7rem; letter-spacing: 0.08em; }
+
+  .hero { padding-top: 4.5rem; }
+  .hero-inner { grid-template-columns: 1fr; gap: 3rem; padding: 2.5rem 1.5rem 4rem; }
+  h1 { font-size: 2.85rem; }
+  .hero-sub { font-size: 1rem; max-width: 100%; margin-bottom: 2rem; }
+  .hero-actions { flex-wrap: wrap; gap: 0.75rem; }
+  .orb-bg-1 { width: 420px; height: 420px; top: -120px; right: -120px; }
+  .orb-bg-2 { width: 320px; height: 320px; }
+  .orb-bg-3 { width: 260px; height: 260px; top: 60%; left: 30%; }
+
+  .section { padding: 4rem 1.5rem; }
+  h2 { font-size: 2.1rem; }
+
+  .how-grid { grid-template-columns: 1fr; gap: 2.5rem; margin-top: 2rem; }
+
+  .privacy-inner { padding: 4rem 1.5rem; }
+  .privacy-grid { grid-template-columns: 1fr; gap: 1rem; margin-top: 2rem; }
+  .privacy-card { padding: 1.5rem; }
+
+  .for-who { padding: 4rem 1.5rem; }
+  .who-grid { grid-template-columns: 1fr; gap: 1rem; margin-top: 2rem; }
+  .who-card { padding: 1.5rem; }
+
+  .quote-band { padding: 3rem 1.5rem; }
+  .quote-text { font-size: 1.2rem; }
+
+  .cta-section { padding: 5rem 1.5rem; }
+  .cta-section h2 { font-size: 2.4rem; }
+  .cta-buttons { flex-direction: column; width: 100%; }
+  .btn-large, .btn-outline { width: 100%; text-align: center; }
+  .app-badges { flex-wrap: wrap; }
+
+  footer { flex-direction: column; gap: 1.5rem; padding: 2.5rem 1.5rem; text-align: center; align-items: center; }
+  .footer-links { flex-wrap: wrap; justify-content: center; gap: 1rem 1.5rem; }
+
+  .overlay-inner { padding: 5.5rem 1.5rem 3rem; }
+  .page-h1 { font-size: 2.1rem; }
+  .waitlist-card { padding: 1.75rem; margin-top: 1.75rem; }
+  .login-card { padding: 1.75rem; }
+
+  .admin-wrap { padding: 5.5rem 1.25rem 3rem; }
+  .admin-title { font-size: 1.75rem; }
+  .admin-header { flex-direction: column; align-items: stretch; }
+  .admin-actions { flex-wrap: wrap; }
+  .admin-stats { grid-template-columns: 1fr; }
+  .admin-table-header { flex-direction: column; align-items: stretch; gap: 0.75rem; }
+  .admin-search { width: 100%; }
+  .admin-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .admin-table { min-width: 520px; }
+  .admin-table th, .admin-table td { padding: 0.7rem 1rem; }
+}
+
+/* ═══ RESPONSIVE — MOBILE ═══ */
+@media (max-width: 480px) {
+  nav { padding: 0.8rem 1rem; }
+  .nav-admin-btn { padding: 0.4rem 0.7rem; font-size: 0.62rem; }
+  .nav-cta { padding: 0.45rem 0.85rem; font-size: 0.65rem; letter-spacing: 0.06em; }
+
+  .hero-inner { padding: 2rem 1.1rem 3rem; gap: 2.5rem; }
+  h1 { font-size: 2.3rem; line-height: 1.1; }
+  .eyebrow { font-size: 0.65rem; letter-spacing: 0.18em; }
+  .hero-sub { font-size: 0.95rem; margin-bottom: 1.75rem; }
+  .hero-actions { flex-direction: column; align-items: stretch; }
+  .btn-primary { padding: 0.9rem 1.5rem; width: 100%; }
+  .btn-ghost { text-align: left; }
+
+  .phone { width: 220px; height: 450px; padding: 1.25rem 1rem; }
+  .orb { width: 100px; height: 100px; }
+
+  .section { padding: 3.5rem 1.1rem; }
+  h2 { font-size: 1.75rem; }
+  .section-label { font-size: 0.65rem; letter-spacing: 0.18em; }
+
+  .privacy-inner { padding: 3.5rem 1.1rem; }
+  .for-who { padding: 3.5rem 1.1rem; }
+
+  .quote-band { padding: 2.5rem 1.1rem; }
+  .quote-text { font-size: 1.05rem; }
+
+  .cta-section { padding: 4rem 1.1rem; }
+  .cta-section h2 { font-size: 2rem; }
+  .cta-sub { font-size: 0.95rem; }
+
+  footer { padding: 2rem 1.1rem; }
+
+  .overlay-inner { padding: 5rem 1.1rem 2.5rem; }
+  .page-h1 { font-size: 1.8rem; }
+  .waitlist-card { padding: 1.35rem; border-radius: 12px; }
+  .login-card { padding: 1.35rem; }
+  .faq-q { font-size: 0.92rem; }
+  .faq-a { font-size: 0.82rem; }
+
+  .admin-wrap { padding: 5rem 1rem 2.5rem; }
+  .admin-title { font-size: 1.5rem; }
+  .admin-stat-num { font-size: 1.8rem; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo" onclick="showHome()">RAYL</div>
+  <ul class="nav-links">
+    <li><a onclick="showHome(); setTimeout(()=>{document.getElementById('how').scrollIntoView({behavior:'smooth'})},80)">How it works</a></li>
+    <li><a onclick="openOverlay('privacy')">Privacy</a></li>
+    <li><a onclick="openOverlay('faq')">FAQ</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="nav-admin-btn" onclick="openOverlay('login')">Admin</button>
+    <button class="nav-cta" onclick="openWaitlist()">GET EARLY ACCESS</button>
+  </div>
+</nav>
+
+<!-- ═══ HOME PAGE ═══ -->
+<div id="home-page">
+
+<div class="hero">
+  <div class="hero-bg">
+    <div class="orb-bg orb-bg-1"></div>
+    <div class="orb-bg orb-bg-2"></div>
+    <div class="orb-bg orb-bg-3"></div>
+  </div>
+  <div class="hero-inner">
+    <div>
+      <div class="eyebrow">Health verification, reimagined</div>
+      <h1>Know before<br>the moment<br><em>matters.</em></h1>
+      <p class="hero-sub">Rayl lets you share your verified sexual health status — instantly, privately, and without handing over your medical records.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="openWaitlist()">JOIN THE WAITLIST</button>
+        <button class="btn-ghost" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">See how it works →</button>
+      </div>
+      <div class="pill-badges">
+        <span class="pill violet">Clinically sourced</span>
+        <span class="pill mint">Zero records stored</span>
+        <span class="pill cyan">One tap to share</span>
+      </div>
+    </div>
+    <div>
+      <div class="phone">
+        <div class="phone-bar"></div>
+        <div class="phone-app-name">RAYL · YOUR STATUS</div>
+        <div class="orb"><div class="orb-lbl">VERIFIED<br>CLEAR</div></div>
+        <div class="orb-status">● Clinically verified · Active</div>
+        <div class="qr-box"><div class="qr-grid" id="qr1"></div></div>
+        <div class="phone-share">tap to share · auto-expires</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div id="how" class="section">
+  <div class="section-label">How it works</div>
+  <h2>Real results.<br><em style="color:var(--mint)">Real privacy.</em><br>Real simple.</h2>
+  <div class="how-grid">
+    <div class="steps">
+      <div class="step"><div class="step-dot" style="background:var(--violet)">01</div><div><h3>Connect your health provider</h3><p>Rayl securely links to your existing test results through your doctor's portal or a home testing kit. You authorize it — Rayl pulls the signal, not the records.</p></div></div>
+      <div class="step"><div class="step-dot" style="background:var(--mint)">02</div><div><h3>Get your orb</h3><p>Your status becomes a color-coded orb derived from clinical results. No diagnoses, no raw data, no exposure to your history. Just a verified signal.</p></div></div>
+      <div class="step"><div class="step-dot" style="background:var(--cyan)">03</div><div><h3>Share with one tap</h3><p>Generate a time-limited QR code. Your partner sees your orb status — nothing more. It auto-expires. You stay in control, always.</p></div></div>
+      <div class="step"><div class="step-dot" style="background:var(--coral)">04</div><div><h3>Stay in the loop</h3><p>If someone you've connected with reports a change, Rayl notifies you privately — no names, no details, just a nudge to test again.</p></div></div>
+    </div>
+    <div class="orbs-panel">
+      <div class="orb-row"><div class="orb-mini green"></div><div class="orb-info"><h4 style="color:var(--mint)">VERIFIED CLEAR</h4><p>Testing verified — all clear</p></div></div>
+      <div class="orb-row"><div class="orb-mini yellow"></div><div class="orb-info"><h4 style="color:#FFD000">ATTENTION RECOMMENDED</h4><p>It is time to update test results</p></div></div>
+      <div class="orb-row"><div class="orb-mini gray"></div><div class="orb-info"><h4 style="color:#B0AABB">UNVERIFIED</h4><p>Test results have not been connected or verified</p></div></div>
+      <div class="orb-row"><div class="orb-mini red"></div><div class="orb-info"><h4 style="color:var(--coral)">ATTENTION REQUIRED</h4><p>Test results require attention</p></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="privacy-band">
+  <div class="privacy-inner">
+    <div class="section-label">Built around you</div>
+    <h2 style="color:var(--cyan)">Privacy isn't a<br>feature. It's the <em>foundation.</em></h2>
+    <div class="privacy-grid">
+      <div class="privacy-card"><div class="privacy-icon">🔒</div><h3>Zero raw records stored</h3><p>Rayl never holds your medical records, test results, or diagnoses. We derive a status signal and immediately discard the source data.</p></div>
+      <div class="privacy-card"><div class="privacy-icon">⚡</div><h3>You control every share</h3><p>Every orb exchanged is time-limited and single-use. No one can access your status without your explicit action, ever.</p></div>
+      <div class="privacy-card"><div class="privacy-icon">🔗</div><h3>Clinically sourced, not self-reported</h3><p>Your orb is backed by real test results pulled directly from verified providers — not a checkbox someone ticked on an app.</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="for-who">
+  <div class="section-label">For everyone</div>
+  <h2>Rayl works for<br><em style="color:var(--pink)">your life.</em></h2>
+  <div class="who-grid">
+    <div class="who-card"><span class="who-tag v">DATING</span><h3>Before something new</h3><p>Have the conversation without the awkwardness. Share your orb before intimacy. Mutual, simple, respectful.</p></div>
+    <div class="who-card"><span class="who-tag m">ONGOING</span><h3>Staying current with a partner</h3><p>Keep each other in the loop as part of a healthy routine — no anxiety, no pressure, just shared transparency on your terms.</p></div>
+    <div class="who-card"><span class="who-tag p">COMMUNITY</span><h3>For communities that lead</h3><p>LGBTQ+ communities have always led on sexual health conversations. Rayl gives you the infrastructure to match that leadership.</p></div>
+  </div>
+</div>
+
+<div class="quote-band">
+  <p class="quote-text">"54% of Americans personally know someone who has had an STI. The conversation is already happening. Rayl just makes the verification possible."</p>
+  <span class="quote-src">KFF National Survey</span>
+</div>
+
+<div class="cta-section">
+  <div class="cta-glow"></div>
+  <div class="section-label" style="justify-content:center;margin-bottom:1.5rem;">Early access</div>
+  <h2>Be first.<br>Be <em>covered.</em></h2>
+  <p class="cta-sub">Rayl is rolling out to early users in Boston and New York. Join the waitlist and get access before everyone else.</p>
+  <div class="cta-buttons">
+    <button class="btn-large" onclick="openWaitlist()">JOIN THE WAITLIST</button>
+    <button class="btn-outline" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">LEARN MORE</button>
+  </div>
+  <div class="app-badges">
+    <div class="app-badge">🍎 App Store</div>
+    <div class="app-badge">▶ Google Play</div>
+  </div>
+</div>
+
+<footer>
+  <div>
+    <div class="footer-logo">RAYL</div>
+    <div class="footer-sub">Health Verification. Reimagined.</div>
+  </div>
+  <ul class="footer-links">
+    <li><a onclick="openOverlay('privacy')">Privacy Policy</a></li>
+    <li><a>Terms</a></li>
+    <li><a>Contact</a></li>
+    <li><a onclick="openOverlay('faq')">FAQ</a></li>
+  </ul>
+  <div class="footer-note">ZERO PHI STORED · FHIR R4 · EPIC MYCHART</div>
+</footer>
+</div><!-- /home-page -->
+
+
+<!-- ═══ WAITLIST OVERLAY ═══ -->
+<div id="overlay-waitlist" class="overlay">
+  <div class="overlay-inner" style="max-width:600px;">
+    <button class="overlay-back" onclick="closeOverlay('waitlist')">← Back to Rayl</button>
+    <div class="eyebrow">Early Access</div>
+    <h1 style="font-family:'DM Serif Display',serif;font-size:3rem;font-weight:400;margin-bottom:0.75rem;">Join the<br><em style="font-style:italic;color:var(--violet)">waitlist.</em></h1>
+    <p style="font-size:0.95rem;color:var(--muted);font-weight:300;line-height:1.75;">Be among the first to get access when Rayl launches in your area. We're rolling out city by city — demand shapes where we go next.</p>
+    <div class="waitlist-card">
+      <div id="wl-form">
+        <label class="wl-label">Email address</label>
+        <input class="wl-input" id="wl-email" type="email" placeholder="you@example.com">
+        <label class="wl-label">State</label>
+        <select class="wl-select" id="wl-state">
+          <option value="">Select your state…</option>
+          <option>Alabama</option><option>Alaska</option><option>Arizona</option><option>Arkansas</option>
+          <option>California</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option>
+          <option>Florida</option><option>Georgia</option><option>Hawaii</option><option>Idaho</option>
+          <option>Illinois</option><option>Indiana</option><option>Iowa</option><option>Kansas</option>
+          <option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option>
+          <option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option>
+          <option>Missouri</option><option>Montana</option><option>Nebraska</option><option>Nevada</option>
+          <option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>New York</option>
+          <option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option>
+          <option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option>
+          <option>South Dakota</option><option>Tennessee</option><option>Texas</option><option>Utah</option>
+          <option>Vermont</option><option>Virginia</option><option>Washington</option><option>West Virginia</option>
+          <option>Wisconsin</option><option>Wyoming</option><option>Washington D.C.</option>
+        </select>
+        <p class="wl-hint">We collect your state to prioritize where Rayl should be rolled out next, based on demand. Your state alone is never enough to identify you.</p>
+        <div class="wl-error" id="wl-error"></div>
+        <button class="wl-submit" onclick="submitWaitlist()">SECURE MY SPOT</button>
+      </div>
+      <div class="wl-success" id="wl-success">
+        <div class="wl-success-orb">✓</div>
+        <h3>You're on the list.</h3>
+        <p>We'll reach out as soon as Rayl is available in your area. Watch your inbox — and thank you for being early.</p>
+      </div>
+    </div>
+    <p style="font-size:0.75rem;color:var(--muted);font-weight:300;text-align:center;margin-top:1.5rem;line-height:1.6;">No spam. No data sold. Read our <a onclick="closeOverlay('waitlist');openOverlay('privacy')" style="color:var(--violet);cursor:pointer;">Privacy Policy</a>.</p>
+  </div>
+</div>
+
+
+<!-- ═══ PRIVACY OVERLAY ═══ -->
+<div id="overlay-privacy" class="overlay">
+  <div class="overlay-inner">
+    <button class="overlay-back" onclick="closeOverlay('privacy')">← Back to Rayl</button>
+    <h1 class="page-h1">Privacy Policy</h1>
+    <span class="page-updated">Last updated: April 5, 2026</span>
+    <div class="page-section"><h2>1. Our Commitment to Privacy</h2><p>Rayl ("we," "us," or "our") is built with privacy as a foundational principle. We do not store, transmit, or share raw medical data. Your health verification is abstracted into a simple color-coded signal — no one, including us, can reverse-engineer your medical records from your signal.</p></div>
+    <div class="page-divider"></div>
+    <div class="page-section"><h2>2. Information We Collect</h2><ul><li><strong style="color:var(--text);font-weight:500;">Account Information:</strong> Email address and password hash for authentication.</li><li><strong style="color:var(--text);font-weight:500;">Signal Data:</strong> A computed color status (green, yellow, red), last verification date, and validity window. No test names, values, or diagnoses are stored.</li><li><strong style="color:var(--text);font-weight:500;">Handshake Data:</strong> Temporary, time-limited tokens used during mutual signal exchanges. These expire automatically.</li><li><strong style="color:var(--text);font-weight:500;">Anonymous Alerts:</strong> If you send an alert, only an anonymous identifier is used — the recipient cannot identify you.</li></ul></div>
+    <div class="page-divider"></div>
+    <div class="page-section"><h2>3. How We Use Your Information</h2><ul><li>To compute and display your verification signal</li><li>To facilitate privacy-preserving handshakes between consenting users</li><li>To deliver anonymous health alerts</li><li>To improve platform reliability and security</li></ul></div>
+    <div class="page-divider"></div>
+    <div class="page-section"><h2>4. Data We Never Collect</h2><ul><li>Raw lab results or medical records</li><li>GPS or precise location data</li><li>Names of sexual or romantic partners</li><li>Browsing history or third-party tracking data</li></ul></div>
+    <div class="page-divider"></div>
+    <div class="page-section"><h2>5. Data Security</h2><p>All data is encrypted in transit (TLS 1.3) and at rest. Authentication tokens are securely managed and never exposed to client-side storage in plain text. Row-level security ensures users can only access their own data.</p></div>
+    <div class="page-divider"></div>
+    <div class="page-section"><h2>6. Data Retention</h2><p>Signal data is retained only as long as your account is active. Handshake tokens expire within 5 minutes and are automatically purged. You may delete your account at any time, which permanently removes all associated data.</p></div>
+    <div class="page-divider"></div>
+    <div class="page-section"><h2>7. Third-Party Services</h2><p>If you connect a healthcare provider (e.g., via FHIR/Epic MyChart), data is processed transiently to compute your signal and is never stored in raw form. We do not sell or share data with advertisers or data brokers.</p></div>
+    <div class="page-divider"></div>
+    <div class="page-section"><h2>8. Your Rights</h2><p>You have the right to access, correct, or delete your data at any time. Contact us at <a href="mailto:privacy@rayl.app" style="color:var(--violet)">privacy@rayl.app</a> for any requests.</p></div>
+    <div class="page-divider"></div>
+    <div class="page-section"><h2>9. Changes to This Policy</h2><p>We may update this policy from time to time. Significant changes will be communicated through the app's inbox system.</p></div>
+  </div>
+</div>
+
+
+<!-- ═══ FAQ OVERLAY ═══ -->
+<div id="overlay-faq" class="overlay">
+  <div class="overlay-inner">
+    <button class="overlay-back" onclick="closeOverlay('faq')">← Back to Rayl</button>
+    <h1 class="page-h1">FAQ</h1>
+    <span class="page-updated">Everything you need to know about Rayl.</span>
+
+    <div class="page-section"><h2>The Basics</h2></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What is Rayl? <span class="faq-chevron">›</span></div><div class="faq-a">Rayl is a consent-based health verification app. It lets you share your verified sexual health status with a partner — instantly and privately — without exposing your underlying medical records. Your status is represented as a color-coded orb, derived from real clinical test results.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">How is Rayl different from just telling my partner I've been tested? <span class="faq-chevron">›</span></div><div class="faq-a">Self-reporting relies on trust alone. Rayl pulls your status directly from verified clinical sources — your doctor's portal or a home testing provider — so the signal is backed by real results, not a checkbox you ticked yourself.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Is Rayl a dating app? <span class="faq-chevron">›</span></div><div class="faq-a">No. Rayl is agnostic to the relationship context. It works whether you're dating someone new, in an ongoing relationship, or part of a community where regular testing is a shared norm. We don't facilitate matching or messaging.</div></div>
+
+    <div class="page-section" style="margin-top:2.5rem;"><h2>Your Orb</h2></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What do the orb colors mean? <span class="faq-chevron">›</span></div><div class="faq-a">Four states: <strong style="color:var(--mint)">Green (Verified Clear)</strong> — testing verified, all clear. <strong style="color:#FFD000">Yellow (Attention Recommended)</strong> — time to update test results. <strong style="color:#B0AABB">Gray (Unverified)</strong> — results not connected. <strong style="color:var(--coral)">Red (Attention Required)</strong> — results require attention.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">How long does my green orb stay active? <span class="faq-chevron">›</span></div><div class="faq-a">The validity window depends on your test type and provider recommendations. When your verification nears expiry, your orb shifts to yellow. Once you retest and results come through, it returns to green automatically.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Can I see my partner's full test results? <span class="faq-chevron">›</span></div><div class="faq-a">No — and that's by design. You see their orb status only. Rayl shows the signal, not the underlying data. This protects your partner's medical privacy while still giving you meaningful, verified information.</div></div>
+
+    <div class="page-section" style="margin-top:2.5rem;"><h2>Privacy & Security</h2></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Does Rayl store my medical records? <span class="faq-chevron">›</span></div><div class="faq-a">Never. Rayl connects to your provider transiently to compute your status signal, then discards the source data. We store only the derived color status, your last verification date, and a validity window.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Who can see my orb status? <span class="faq-chevron">›</span></div><div class="faq-a">Only people you explicitly choose to share it with. Each share generates a time-limited, single-use token that expires automatically. Rayl staff cannot view your status.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What happens if I receive an exposure alert? <span class="faq-chevron">›</span></div><div class="faq-a">You'll receive a private, anonymous notification. No identifying information about the person is shared — only the nudge that testing is recommended. You won't know who sent it, and they won't know if you act on it.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Is Rayl HIPAA compliant? <span class="faq-chevron">›</span></div><div class="faq-a">Rayl operates under a user-directed data access model. Under this model, Rayl is not a HIPAA covered entity. That said, we apply HIPAA-equivalent security standards: TLS 1.3 in transit, encryption at rest, and row-level access controls.</div></div>
+
+    <div class="page-section" style="margin-top:2.5rem;"><h2>Getting Started</h2></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Which health providers does Rayl connect to? <span class="faq-chevron">›</span></div><div class="faq-a">Rayl integrates with Epic MyChart via FHIR R4 OAuth, covering a large portion of US health systems. We also support Everlywell and Nurx. More providers are being added.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What if I don't have a connected provider yet? <span class="faq-chevron">›</span></div><div class="faq-a">Your orb will display as gray (Unverified) until you link a provider. You can still share your unverified status — full transparency is always better than no conversation at all.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">How do I delete my account? <span class="faq-chevron">›</span></div><div class="faq-a">From within the app's settings. Deletion is permanent and immediately removes all associated data — signal, handshake history, and credentials.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Where is Rayl available? <span class="faq-chevron">›</span></div><div class="faq-a">Currently rolling out to early users in Boston and New York. Join the waitlist to get access before the wider launch.</div></div>
+
+    <div style="margin-top:2.5rem;padding:1.5rem 2rem;background:var(--bg2);border:1px solid rgba(201,111,255,0.12);border-radius:12px;">
+      <p style="font-size:0.85rem;color:var(--muted);font-weight:300;">Still have questions? Reach out at <a href="mailto:hello@rayl.app" style="color:var(--violet)">hello@rayl.app</a></p>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ LOGIN OVERLAY ═══ -->
+<div id="overlay-login" class="overlay">
+  <div class="overlay-inner" style="max-width:480px;">
+    <button class="overlay-back" onclick="closeOverlay('login')">← Back to Rayl</button>
+    <div class="eyebrow">Admin Access</div>
+    <h1 style="font-family:'DM Serif Display',serif;font-size:2.5rem;font-weight:400;margin-bottom:0.5rem;">Sign in</h1>
+    <p style="font-size:0.9rem;color:var(--muted);font-weight:300;margin-bottom:0;">This area is restricted to Rayl administrators.</p>
+    <div class="login-card">
+      <div class="login-error" id="login-error">Incorrect email or password. Please try again.</div>
+      <label class="wl-label">Email</label>
+      <input class="wl-input" id="login-email" type="email" placeholder="admin@rayl.app" onkeydown="if(event.key==='Enter')doLogin()">
+      <label class="wl-label">Password</label>
+      <input class="wl-input" id="login-pw" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+      <button class="wl-submit" onclick="doLogin()">SIGN IN</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ ADMIN DASHBOARD OVERLAY ═══ -->
+<div id="overlay-admin" class="overlay">
+  <div class="admin-wrap">
+    <div class="admin-header">
+      <div>
+        <div class="admin-title">Waitlist Dashboard</div>
+        <div class="admin-meta" id="admin-meta"></div>
+      </div>
+      <div class="admin-actions">
+        <button class="admin-logout" onclick="adminLogout()">Sign Out</button>
+        <a class="admin-dl" href="https://docs.google.com/spreadsheets/d/1pSCN-zN8PGPtjM9fqjq9GwwoH-lN9clU0zHasWPHkZI/edit" target="_blank" style="text-decoration:none;display:inline-flex;align-items:center;">↗ Open Sheet</a>
+      </div>
+    </div>
+    <div style="background:var(--bg2);border:1px solid rgba(201,111,255,0.12);border-radius:14px;padding:3rem;text-align:center;margin-top:1rem;">
+      <div style="font-size:2.5rem;margin-bottom:1rem;">📊</div>
+      <div style="font-family:'DM Serif Display',serif;font-size:1.6rem;font-weight:400;margin-bottom:0.75rem;">Submissions go directly to Google Sheets</div>
+      <p style="font-size:0.9rem;color:var(--muted);font-weight:300;line-height:1.75;max-width:420px;margin:0 auto 2rem;">Every waitlist signup is recorded in real time — from any device, any browser. Click below to open your live sheet.</p>
+      <a href="https://docs.google.com/spreadsheets/d/1pSCN-zN8PGPtjM9fqjq9GwwoH-lN9clU0zHasWPHkZI/edit" target="_blank" style="display:inline-block;background:var(--violet);color:var(--bg);font-family:'DM Mono',monospace;font-size:0.8rem;letter-spacing:0.1em;padding:0.9rem 2rem;border-radius:4px;text-decoration:none;font-weight:500;">OPEN WAITLIST SHEET ↗</a>
+    </div>
+  </div>
+</div>
+
+
+<script>
+/* QR */
+const qrp=[1,0,1,1,0,1,0,1,0,0,1,0,1,0,1,0,1,1,0,1,0,1,0,0,1,1,1,0,1,0,0,1,0,0,1,1];
+const qrg=document.getElementById('qr1');
+qrp.forEach(v=>{const c=document.createElement('div');c.className=v?'qc':'qc e';qrg.appendChild(c);});
+
+/* OVERLAY MANAGEMENT */
+const OVERLAYS=['waitlist','privacy','faq','login','admin'];
+function openOverlay(name){
+  OVERLAYS.forEach(id=>document.getElementById('overlay-'+id).classList.remove('active'));
+  document.getElementById('overlay-'+name).classList.add('active');
+  document.getElementById('overlay-'+name).scrollTop=0;
+  document.body.style.overflow='hidden';
+}
+function closeOverlay(name){
+  document.getElementById('overlay-'+name).classList.remove('active');
+  document.body.style.overflow='';
+}
+function showHome(){
+  OVERLAYS.forEach(id=>document.getElementById('overlay-'+id).classList.remove('active'));
+  document.body.style.overflow='';
+}
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){showHome();}
+});
+
+/* WAITLIST */
+function openWaitlist(){
+  document.getElementById('wl-form').style.display='block';
+  document.getElementById('wl-success').style.display='none';
+  document.getElementById('wl-error').style.display='none';
+  document.getElementById('wl-error').textContent='';
+  document.getElementById('wl-email').value='';
+  document.getElementById('wl-state').value='';
+  openOverlay('waitlist');
+}
+
+const SHEET_URL='https://script.google.com/macros/s/AKfycbyJ-Mq3wH4y4LFAthNHZFM3I4DYNOnIQ0Q8y7bE9Md-7JCggtJiNkHZlUOlrvn7Gegz/exec';
+
+function submitWaitlist(){
+  // Blur active element first so mobile keyboards flush their value into the input
+  if(document.activeElement) document.activeElement.blur();
+  // Yield one tick so iOS/Android commits the input value before we read it
+  setTimeout(function(){
+    const email=document.getElementById('wl-email').value.trim();
+    const state=document.getElementById('wl-state').value;
+    const err=document.getElementById('wl-error');
+    const btn=document.querySelector('.wl-submit');
+    err.style.display='none'; err.textContent='';
+
+    if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+      err.textContent='Please enter a valid email address.';err.style.display='block';return;
+    }
+    if(!state){err.textContent='Please select your state.';err.style.display='block';return;}
+
+    btn.disabled=true; btn.textContent='SUBMITTING…';
+
+    fetch(SHEET_URL,{
+      method:'POST',
+      mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email,state})
+    })
+    .then(()=>{
+      document.getElementById('wl-form').style.display='none';
+      document.getElementById('wl-success').style.display='block';
+    })
+    .catch(()=>{
+      err.textContent='Something went wrong. Please try again.';
+      err.style.display='block';
+      btn.disabled=false; btn.textContent='SECURE MY SPOT';
+    });
+  },50);
+}
+
+/* AUTH */
+const AU='khahlil.louisy@gmail.com', AP='#Academics#1221';
+function doLogin(){
+  const e=document.getElementById('login-email').value.trim();
+  const p=document.getElementById('login-pw').value;
+  const errEl=document.getElementById('login-error');
+  if(e===AU&&p===AP){
+    sessionStorage.setItem('rayl_admin','1');
+    errEl.style.display='none';
+    closeOverlay('login');
+    openAdmin();
+  } else {
+    errEl.style.display='block';
+  }
+}
+function adminLogout(){
+  sessionStorage.removeItem('rayl_admin');
+  closeOverlay('admin');
+}
+
+/* ADMIN DASHBOARD */
+function openAdmin(){
+  openOverlay('admin');
+  const now=new Date();
+  document.getElementById('admin-meta').textContent=
+    'Last refreshed: '+now.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})+
+    ' at '+now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+}
+</script>
+</body>
+</html>
