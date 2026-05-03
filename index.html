@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rayl — Health Verification, Reimagined</title>
+<title>Rayl — Sexual health, verified.</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -348,12 +348,12 @@ footer { padding: 3rem 4rem; border-top: 1px solid rgba(255,255,255,0.04); displ
   </div>
   <div class="hero-inner">
     <div>
-      <div class="eyebrow">Health verification, reimagined</div>
-      <h1>Know before<br>the moment<br><em>matters.</em></h1>
-      <p class="hero-sub">Rayl lets you share your verified sexual health status — instantly, privately, and without handing over your medical records.</p>
+      <div class="eyebrow">Sexual health, verified.</div>
+      <h1>Get tested.<br>Get verified.<br><em>Share the proof.</em></h1>
+      <p class="hero-sub">Your real test results, from your doctor or a home kit, turned into a verified status you can share with a partner in seconds. No records exchanged. No conversation from scratch.</p>
       <div class="hero-actions">
         <button class="btn-primary" onclick="openWaitlist()">JOIN THE WAITLIST</button>
-        <button class="btn-ghost" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">See how it works →</button>
+        <button class="btn-ghost" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">How it works ↓</button>
       </div>
       <div class="pill-badges">
         <span class="pill violet">Clinically sourced</span>
@@ -378,16 +378,16 @@ footer { padding: 3rem 4rem; border-top: 1px solid rgba(255,255,255,0.04); displ
 
 <div id="how" class="section">
   <div class="section-label">How it works</div>
-  <h2>Real results.<br><em style="color:var(--mint)">Real privacy.</em><br>Real simple.</h2>
+  <h2>From test<br>to <em style="color:var(--mint)">verified</em> in minutes.</h2>
   <div class="how-grid">
     <div class="steps">
-      <div class="step"><div class="step-dot" style="background:var(--violet)">01</div><div><h3>Connect your health provider</h3><p>Rayl securely links to your existing test results through your doctor's portal or a home testing kit. You authorize it — Rayl pulls the signal, not the records.</p></div></div>
-      <div class="step"><div class="step-dot" style="background:var(--mint)">02</div><div><h3>Get your orb</h3><p>Your status becomes a color-coded orb derived from clinical results. No diagnoses, no raw data, no exposure to your history. Just a verified signal.</p></div></div>
-      <div class="step"><div class="step-dot" style="background:var(--cyan)">03</div><div><h3>Share with one tap</h3><p>Generate a time-limited QR code. Your partner sees your orb status — nothing more. It auto-expires. You stay in control, always.</p></div></div>
-      <div class="step"><div class="step-dot" style="background:var(--coral)">04</div><div><h3>Stay in the loop</h3><p>If someone you've connected with reports a change, Rayl notifies you privately — no names, no details, just a nudge to test again.</p></div></div>
+      <div class="step"><div class="step-dot" style="background:var(--violet)">01</div><div><h3>Connect your health provider</h3><p>Rayl connects to your doctor's portal or home testing kit via a standard medical API. You authorize the connection. We read your results, derive a status, and don't keep the underlying data.</p></div></div>
+      <div class="step"><div class="step-dot" style="background:var(--mint)">02</div><div><h3>Get your orb</h3><p>Your status becomes a color-coded orb backed by real clinical results, not self-reporting. Green means clear. Yellow means time to retest. Red means action needed.</p></div></div>
+      <div class="step"><div class="step-dot" style="background:var(--cyan)">03</div><div><h3>Share with one tap</h3><p>Generate a QR code. Your partner scans it and sees your orb status, not your records, not your results. The code expires after use.</p></div></div>
+      <div class="step"><div class="step-dot" style="background:var(--coral)">04</div><div><h3>Stay in the loop</h3><p>If a contact reports a change, you get an anonymous alert. No names, no details. Just a flag that it's worth retesting.</p></div></div>
     </div>
     <div class="orbs-panel">
-      <div class="orb-row"><div class="orb-mini green"></div><div class="orb-info"><h4 style="color:var(--mint)">VERIFIED CLEAR</h4><p>Testing verified — all clear</p></div></div>
+      <div class="orb-row"><div class="orb-mini green"></div><div class="orb-info"><h4 style="color:var(--mint)">VERIFIED CLEAR</h4><p>Testing verified, all clear</p></div></div>
       <div class="orb-row"><div class="orb-mini yellow"></div><div class="orb-info"><h4 style="color:#FFD000">ATTENTION RECOMMENDED</h4><p>It is time to update test results</p></div></div>
       <div class="orb-row"><div class="orb-mini gray"></div><div class="orb-info"><h4 style="color:#B0AABB">UNVERIFIED</h4><p>Test results have not been connected or verified</p></div></div>
       <div class="orb-row"><div class="orb-mini red"></div><div class="orb-info"><h4 style="color:var(--coral)">ATTENTION REQUIRED</h4><p>Test results require attention</p></div></div>
@@ -397,36 +397,36 @@ footer { padding: 3rem 4rem; border-top: 1px solid rgba(255,255,255,0.04); displ
 
 <div class="privacy-band">
   <div class="privacy-inner">
-    <div class="section-label">Built around you</div>
-    <h2 style="color:var(--cyan)">Privacy isn't a<br>feature. It's the <em>foundation.</em></h2>
+    <div class="section-label">What Rayl doesn't store</div>
+    <h2 style="color:var(--cyan)">No records.<br><em>No exceptions.</em></h2>
     <div class="privacy-grid">
-      <div class="privacy-card"><div class="privacy-icon">🔒</div><h3>Zero raw records stored</h3><p>Rayl never holds your medical records, test results, or diagnoses. We derive a status signal and immediately discard the source data.</p></div>
-      <div class="privacy-card"><div class="privacy-icon">⚡</div><h3>You control every share</h3><p>Every orb exchanged is time-limited and single-use. No one can access your status without your explicit action, ever.</p></div>
-      <div class="privacy-card"><div class="privacy-icon">🔗</div><h3>Clinically sourced, not self-reported</h3><p>Your orb is backed by real test results pulled directly from verified providers — not a checkbox someone ticked on an app.</p></div>
+      <div class="privacy-card"><div class="privacy-icon">🔒</div><h3>Zero raw records stored</h3><p>We never store your test results, lab values, or diagnoses. Once your status is computed, the source data is gone. There's nothing to breach.</p></div>
+      <div class="privacy-card"><div class="privacy-icon">⚡</div><h3>You control every share</h3><p>Every QR code you generate is single-use and time-limited. Nobody has standing access to your status. Not your partner, not us.</p></div>
+      <div class="privacy-card"><div class="privacy-icon">🔗</div><h3>Clinically sourced, not self-reported</h3><p>Your orb comes from actual test results pulled from your provider via a federally mandated medical API (FHIR R4). It can't be faked by ticking a box.</p></div>
     </div>
   </div>
 </div>
 
 <div class="for-who">
   <div class="section-label">For everyone</div>
-  <h2>Rayl works for<br><em style="color:var(--pink)">your life.</em></h2>
+  <h2>For anyone who<br><em style="color:var(--pink)">takes it seriously.</em></h2>
   <div class="who-grid">
-    <div class="who-card"><span class="who-tag v">DATING</span><h3>Before something new</h3><p>Have the conversation without the awkwardness. Share your orb before intimacy. Mutual, simple, respectful.</p></div>
-    <div class="who-card"><span class="who-tag m">ONGOING</span><h3>Staying current with a partner</h3><p>Keep each other in the loop as part of a healthy routine — no anxiety, no pressure, just shared transparency on your terms.</p></div>
-    <div class="who-card"><span class="who-tag p">COMMUNITY</span><h3>For communities that lead</h3><p>LGBTQ+ communities have always led on sexual health conversations. Rayl gives you the infrastructure to match that leadership.</p></div>
+    <div class="who-card"><span class="who-tag v">DATING</span><h3>Before something new</h3><p>Share your status before the first time. Ask for theirs. It takes ten seconds and starts the conversation the right way.</p></div>
+    <div class="who-card"><span class="who-tag m">ONGOING</span><h3>Staying current with a partner</h3><p>Keep each other updated as part of a normal routine. Rayl alerts you when either status changes so you don't have to remember to ask.</p></div>
+    <div class="who-card"><span class="who-tag p">COMMUNITY</span><h3>For communities that test regularly</h3><p>If regular STI screening is already part of how you move, Rayl gives your results somewhere to go. Verified status, shareable on demand.</p></div>
   </div>
 </div>
 
 <div class="quote-band">
-  <p class="quote-text">"54% of Americans personally know someone who has had an STI. The conversation is already happening. Rayl just makes the verification possible."</p>
+  <p class="quote-text">"54% of Americans personally know someone who has had an STI. Most people are already having the conversation. Rayl just gives it something to stand on."</p>
   <span class="quote-src">KFF National Survey</span>
 </div>
 
 <div class="cta-section">
   <div class="cta-glow"></div>
   <div class="section-label" style="justify-content:center;margin-bottom:1.5rem;">Early access</div>
-  <h2>Be first.<br>Be <em>covered.</em></h2>
-  <p class="cta-sub">Rayl is rolling out to early users in Boston and New York. Join the waitlist and get access before everyone else.</p>
+  <h2>Get early<br><em>access.</em></h2>
+  <p class="cta-sub">Rayl is launching in Boston and New York first. Join the waitlist and we'll notify you when it's live in your city.</p>
   <div class="cta-buttons">
     <button class="btn-large" onclick="openWaitlist()">JOIN THE WAITLIST</button>
     <button class="btn-outline" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">LEARN MORE</button>
@@ -440,7 +440,7 @@ footer { padding: 3rem 4rem; border-top: 1px solid rgba(255,255,255,0.04); displ
 <footer>
   <div>
     <div class="footer-logo">RAYL</div>
-    <div class="footer-sub">Health Verification. Reimagined.</div>
+    <div class="footer-sub">Sexual health, verified.</div>
   </div>
   <ul class="footer-links">
     <li><a onclick="openOverlay('privacy')">Privacy Policy</a></li>
@@ -459,7 +459,7 @@ footer { padding: 3rem 4rem; border-top: 1px solid rgba(255,255,255,0.04); displ
     <button class="overlay-back" onclick="closeOverlay('waitlist')">← Back to Rayl</button>
     <div class="eyebrow">Early Access</div>
     <h1 style="font-family:'DM Serif Display',serif;font-size:3rem;font-weight:400;margin-bottom:0.75rem;">Join the<br><em style="font-style:italic;color:var(--violet)">waitlist.</em></h1>
-    <p style="font-size:0.95rem;color:var(--muted);font-weight:300;line-height:1.75;">Be among the first to get access when Rayl launches in your area. We're rolling out city by city — demand shapes where we go next.</p>
+    <p style="font-size:0.95rem;color:var(--muted);font-weight:300;line-height:1.75;">Rayl is launching city by city. Tell us where you are and we'll reach out when it's live in your area.</p>
     <div class="waitlist-card">
       <div id="wl-form">
         <label class="wl-label">Email address</label>
@@ -488,7 +488,7 @@ footer { padding: 3rem 4rem; border-top: 1px solid rgba(255,255,255,0.04); displ
       <div class="wl-success" id="wl-success">
         <div class="wl-success-orb">✓</div>
         <h3>You're on the list.</h3>
-        <p>We'll reach out as soon as Rayl is available in your area. Watch your inbox — and thank you for being early.</p>
+        <p>We'll reach out as soon as Rayl is available in your area. Watch your inbox, and thank you for being early.</p>
       </div>
     </div>
     <p style="font-size:0.75rem;color:var(--muted);font-weight:300;text-align:center;margin-top:1.5rem;line-height:1.6;">No spam. No data sold. Read our <a onclick="closeOverlay('waitlist');openOverlay('privacy')" style="color:var(--violet);cursor:pointer;">Privacy Policy</a>.</p>
@@ -504,7 +504,7 @@ footer { padding: 3rem 4rem; border-top: 1px solid rgba(255,255,255,0.04); displ
     <span class="page-updated">Last updated: April 5, 2026</span>
     <div class="page-section"><h2>1. Our Commitment to Privacy</h2><p>Rayl ("we," "us," or "our") is built with privacy as a foundational principle. We do not store, transmit, or share raw medical data. Your health verification is abstracted into a simple color-coded signal — no one, including us, can reverse-engineer your medical records from your signal.</p></div>
     <div class="page-divider"></div>
-    <div class="page-section"><h2>2. Information We Collect</h2><ul><li><strong style="color:var(--text);font-weight:500;">Account Information:</strong> Email address and password hash for authentication.</li><li><strong style="color:var(--text);font-weight:500;">Signal Data:</strong> A computed color status (green, yellow, red), last verification date, and validity window. No test names, values, or diagnoses are stored.</li><li><strong style="color:var(--text);font-weight:500;">Handshake Data:</strong> Temporary, time-limited tokens used during mutual signal exchanges. These expire automatically.</li><li><strong style="color:var(--text);font-weight:500;">Anonymous Alerts:</strong> If you send an alert, only an anonymous identifier is used — the recipient cannot identify you.</li></ul></div>
+    <div class="page-section"><h2>2. Information We Collect</h2><ul><li><strong style="color:var(--text);font-weight:500;">Account Information:</strong> Email address and password hash for authentication.</li><li><strong style="color:var(--text);font-weight:500;">Signal Data:</strong> A computed color status (green, yellow, red), last verification date, and validity window. No test names, values, or diagnoses are stored.</li><li><strong style="color:var(--text);font-weight:500;">Handshake Data:</strong> Temporary, time-limited tokens used during mutual signal exchanges. These expire automatically.</li><li><strong style="color:var(--text);font-weight:500;">Anonymous Alerts:</strong> If you send an alert, only an anonymous identifier is used. The recipient cannot identify you.</li></ul></div>
     <div class="page-divider"></div>
     <div class="page-section"><h2>3. How We Use Your Information</h2><ul><li>To compute and display your verification signal</li><li>To facilitate privacy-preserving handshakes between consenting users</li><li>To deliver anonymous health alerts</li><li>To improve platform reliability and security</li></ul></div>
     <div class="page-divider"></div>
@@ -531,29 +531,29 @@ footer { padding: 3rem 4rem; border-top: 1px solid rgba(255,255,255,0.04); displ
     <span class="page-updated">Everything you need to know about Rayl.</span>
 
     <div class="page-section"><h2>The Basics</h2></div>
-    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What is Rayl? <span class="faq-chevron">›</span></div><div class="faq-a">Rayl is a consent-based health verification app. It lets you share your verified sexual health status with a partner — instantly and privately — without exposing your underlying medical records. Your status is represented as a color-coded orb, derived from real clinical test results.</div></div>
-    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">How is Rayl different from just telling my partner I've been tested? <span class="faq-chevron">›</span></div><div class="faq-a">Self-reporting relies on trust alone. Rayl pulls your status directly from verified clinical sources — your doctor's portal or a home testing provider — so the signal is backed by real results, not a checkbox you ticked yourself.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What is Rayl? <span class="faq-chevron">›</span></div><div class="faq-a">Rayl is a consent-based health verification app. It lets you share your verified sexual health status with a partner, instantly and privately, without exposing your underlying medical records. Your status is represented as a color-coded orb, derived from real clinical test results.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">How is Rayl different from just telling my partner I've been tested? <span class="faq-chevron">›</span></div><div class="faq-a">Self-reporting relies on trust alone. Rayl pulls your status directly from verified clinical sources (your doctor's portal or a home testing provider) so the signal is backed by real results, not a checkbox you ticked yourself.</div></div>
     <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Is Rayl a dating app? <span class="faq-chevron">›</span></div><div class="faq-a">No. Rayl is agnostic to the relationship context. It works whether you're dating someone new, in an ongoing relationship, or part of a community where regular testing is a shared norm. We don't facilitate matching or messaging.</div></div>
 
     <div class="page-section" style="margin-top:2.5rem;"><h2>Your Orb</h2></div>
-    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What do the orb colors mean? <span class="faq-chevron">›</span></div><div class="faq-a">Four states: <strong style="color:var(--mint)">Green (Verified Clear)</strong> — testing verified, all clear. <strong style="color:#FFD000">Yellow (Attention Recommended)</strong> — time to update test results. <strong style="color:#B0AABB">Gray (Unverified)</strong> — results not connected. <strong style="color:var(--coral)">Red (Attention Required)</strong> — results require attention.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What do the orb colors mean? <span class="faq-chevron">›</span></div><div class="faq-a">Four states: <strong style="color:var(--mint)">Green (Verified Clear)</strong>: testing verified, all clear. <strong style="color:#FFD000">Yellow (Attention Recommended)</strong>: time to update test results. <strong style="color:#B0AABB">Gray (Unverified)</strong>: results not connected. <strong style="color:var(--coral)">Red (Attention Required)</strong>: results require attention.</div></div>
     <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">How long does my green orb stay active? <span class="faq-chevron">›</span></div><div class="faq-a">The validity window depends on your test type and provider recommendations. When your verification nears expiry, your orb shifts to yellow. Once you retest and results come through, it returns to green automatically.</div></div>
-    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Can I see my partner's full test results? <span class="faq-chevron">›</span></div><div class="faq-a">No — and that's by design. You see their orb status only. Rayl shows the signal, not the underlying data. This protects your partner's medical privacy while still giving you meaningful, verified information.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Can I see my partner's full test results? <span class="faq-chevron">›</span></div><div class="faq-a">No, and that's by design. You see their orb status only. Rayl shows the signal, not the underlying data. This protects your partner's medical privacy while still giving you meaningful, verified information.</div></div>
 
     <div class="page-section" style="margin-top:2.5rem;"><h2>Privacy & Security</h2></div>
     <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Does Rayl store my medical records? <span class="faq-chevron">›</span></div><div class="faq-a">Never. Rayl connects to your provider transiently to compute your status signal, then discards the source data. We store only the derived color status, your last verification date, and a validity window.</div></div>
     <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Who can see my orb status? <span class="faq-chevron">›</span></div><div class="faq-a">Only people you explicitly choose to share it with. Each share generates a time-limited, single-use token that expires automatically. Rayl staff cannot view your status.</div></div>
-    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What happens if I receive an exposure alert? <span class="faq-chevron">›</span></div><div class="faq-a">You'll receive a private, anonymous notification. No identifying information about the person is shared — only the nudge that testing is recommended. You won't know who sent it, and they won't know if you act on it.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What happens if I receive an exposure alert? <span class="faq-chevron">›</span></div><div class="faq-a">You'll receive a private, anonymous notification. No identifying information about the person is shared, just a nudge that testing is recommended. You won't know who sent it, and they won't know if you act on it.</div></div>
     <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Is Rayl HIPAA compliant? <span class="faq-chevron">›</span></div><div class="faq-a">Rayl operates under a user-directed data access model. Under this model, Rayl is not a HIPAA covered entity. That said, we apply HIPAA-equivalent security standards: TLS 1.3 in transit, encryption at rest, and row-level access controls.</div></div>
 
     <div class="page-section" style="margin-top:2.5rem;"><h2>Getting Started</h2></div>
     <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Which health providers does Rayl connect to? <span class="faq-chevron">›</span></div><div class="faq-a">Rayl integrates with Epic MyChart via FHIR R4 OAuth, covering a large portion of US health systems. We also support Everlywell and Nurx. More providers are being added.</div></div>
-    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What if I don't have a connected provider yet? <span class="faq-chevron">›</span></div><div class="faq-a">Your orb will display as gray (Unverified) until you link a provider. You can still share your unverified status — full transparency is always better than no conversation at all.</div></div>
-    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">How do I delete my account? <span class="faq-chevron">›</span></div><div class="faq-a">From within the app's settings. Deletion is permanent and immediately removes all associated data — signal, handshake history, and credentials.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What if I don't have a connected provider yet? <span class="faq-chevron">›</span></div><div class="faq-a">Your orb will display as gray (Unverified) until you link a provider. You can still share your unverified status. Full transparency is always better than no conversation at all.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">How do I delete my account? <span class="faq-chevron">›</span></div><div class="faq-a">From within the app's settings. Deletion is permanent and immediately removes all associated data: signal, handshake history, and credentials.</div></div>
     <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Where is Rayl available? <span class="faq-chevron">›</span></div><div class="faq-a">Currently rolling out to early users in Boston and New York. Join the waitlist to get access before the wider launch.</div></div>
 
     <div style="margin-top:2.5rem;padding:1.5rem 2rem;background:var(--bg2);border:1px solid rgba(201,111,255,0.12);border-radius:12px;">
-      <p style="font-size:0.85rem;color:var(--muted);font-weight:300;">Still have questions? Reach out at <a href="mailto:info@thepii.org" style="color:var(--violet)">info@thepii.org</a></p>
+      <p style="font-size:0.85rem;color:var(--muted);font-weight:300;">Still have questions? Reach out at <a href="mailto:hello@rayl.app" style="color:var(--violet)">hello@rayl.app</a></p>
     </div>
   </div>
 </div>
