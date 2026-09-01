@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Returning to Rayl…</title>
+<style>
+  :root { color-scheme: dark; }
+  body {
+    margin: 0; min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    background: #0E0B14; color: #F2F2F2;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    padding: 24px; text-align: center;
+  }
+  .card { max-width: 340px; }
+  .orb {
+    width: 76px; height: 76px; margin: 0 auto 28px; border-radius: 50%;
+    border: 2px solid rgba(23,207,99,0.4); background: rgba(23,207,99,0.15);
+    box-shadow: 0 0 40px rgba(23,207,99,0.25);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100% { opacity: 1 } 50% { opacity: .8 } }
+  h1 { font-size: 19px; font-weight: 600; margin: 0 0 10px; }
+  p { font-size: 14px; line-height: 1.6; color: #888198; margin: 0 0 20px; }
+  a.btn {
+    display: inline-block; background: #17CF63; color: #0E0B14;
+    text-decoration: none; font-weight: 600; font-size: 15px;
+    padding: 13px 26px; border-radius: 12px;
+  }
+  .err { color: #EE2B2B; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="orb"></div>
+    <h1 id="title">Returning to Rayl…</h1>
+    <p id="msg">If the app doesn't open automatically, tap below.</p>
+    <a class="btn" id="open" href="#">Open Rayl</a>
+  </div>
+
+<script>
+(function () {
+  // Epic redirects here after authorization because it only accepts HTTPS
+  // redirect URIs. This page forwards straight back into the native app,
+  // carrying the query string unchanged.
+  //
+  // The authorization code passes through this page, which is safe: the
+  // flow uses PKCE, so a code without the code_verifier — which never
+  // leaves the device — cannot be exchanged for a token. Nothing is
+  // logged, stored, or sent anywhere from this page.
+
+  var search = window.location.search || '';
+  var hash = window.location.hash || '';
+  var target = 'rayl://fhir-callback' + search + hash;
+
+  document.getElementById('open').setAttribute('href', target);
+
+  var params = new URLSearchParams(search);
+
+  if (params.get('error')) {
+    document.getElementById('title').textContent = 'Connection cancelled';
+    document.getElementById('title').className = 'err';
+    document.getElementById('msg').textContent =
+      params.get('error_description') || 'You can close this page and try again in the app.';
+    document.getElementById('open').textContent = 'Back to Rayl';
+    document.getElementById('open').setAttribute('href', 'rayl://fhir-callback' + search);
+    return;
+  }
+
+  if (!params.get('code')) {
+    document.getElementById('title').textContent = 'Nothing to return';
+    document.getElementById('msg').textContent =
+      'This page is only used when returning from your health provider.';
+    return;
+  }
+
+  // Hand off immediately. Some browsers block this without a gesture, which
+  // is what the button is for.
+  window.location.replace(target);
+})();
+</script>
+</body>
+</html>
